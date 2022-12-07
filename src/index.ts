@@ -27,10 +27,15 @@ function getAllTaskPublicIps(
   region: string,
   clusterName: string,
   serviceName: string
-): string[] {
-  console.log(region, clusterName, serviceName);
-  return [];
+): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    resolve(["the", "resolve"]);
+  });
 }
+
+getAllTaskPublicIps("test", "test", "test").then((value) => {
+  console.log(value);
+});
 
 var params = {
   cluster: clusterName,
