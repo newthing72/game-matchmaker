@@ -1,0 +1,32 @@
+{
+  "name": "game-matchmaker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc & node .",
+    "dev": "concurrently \"tsc -w\" \"nodemon .\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newthing72/game-matchmaker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/newthing72/game-matchmaker/issues"
+  },
+  "homepage": "https://github.com/newthing72/game-matchmaker#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.14",
+    "@types/node": "^18.11.11",
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20",
+    "typescript": "^4.9.3"
+  }
+}
