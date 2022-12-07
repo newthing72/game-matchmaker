@@ -22,6 +22,16 @@ const ec2 = new AWS.EC2({
 const clusterName = "game-cluster";
 const serviceName = "game-service";
 
+// TODO define
+function getAllTaskPublicIps(
+  region: string,
+  clusterName: string,
+  serviceName: string
+): string[] {
+  console.log(region, clusterName, serviceName);
+  return [];
+}
+
 var params = {
   cluster: clusterName,
   serviceName: serviceName,
