@@ -20,9 +20,11 @@ const ec2 = new AWS.EC2({
 });
 
 const clusterName = "game-cluster";
+const serviceName = "game-service";
 
 var params = {
   cluster: clusterName,
+  serviceName: serviceName,
 };
 
 ecs
