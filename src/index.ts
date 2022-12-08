@@ -33,44 +33,66 @@ function getAllTaskPublicIps(
   });
 }
 
-getAllTaskPublicIps("test", "test", "test").then((value) => {
-  console.log(value);
-});
+// getAllTaskPublicIps("test", "test", "test").then((value) => {
+//   console.log(value);
+// });
 
 var params = {
   cluster: clusterName,
   serviceName: serviceName,
 };
 
-ecs
-  .listTasks(params)
-  .promise()
-  .then((value) => {
-    var params = {
-      cluster: clusterName,
-      tasks: [value.taskArns[0]],
-    };
-    return ecs.describeTasks(params).promise();
-  })
-  .then((value) => {
-    const task = value.tasks[0];
-    const attachments = task.attachments;
-    const elasticNetworkInterface = attachments[0];
+// ecs
+//   .listTasks(params)
+//   .promise()
+//   .then((value) => {
+//     var params = {
+//       cluster: clusterName,
+//       tasks: [value.taskArns[0]],
+//     };
+//     return ecs.describeTasks(params).promise();
+//   })
+//   .then((value) => {
+//     const task = value.tasks[0];
+//     const attachments = task.attachments;
+//     const elasticNetworkInterface = attachments[0];
 
-    const networkInterfaceId = elasticNetworkInterface.details.find(
-      (element) => element.name == "networkInterfaceId"
-    );
+//     const networkInterfaceId = elasticNetworkInterface.details.find(
+//       (element) => element.name == "networkInterfaceId"
+//     );
 
-    const params = {
-      NetworkInterfaceIds: [networkInterfaceId.value],
-    };
+//     const params = {
+//       NetworkInterfaceIds: [networkInterfaceId.value],
+//     };
 
-    return ec2.describeNetworkInterfaces(params).promise();
-  })
-  .then((value) => {
-    const first = value.NetworkInterfaces[0];
-    console.log("PublicIp", first.Association.PublicIp);
-  })
-  .catch((rejection) => {
-    console.error(rejection);
-  });
+//     return ec2.describeNetworkInterfaces(params).promise();
+//   })
+//   .then((value) => {
+//     const first = value.NetworkInterfaces[0];
+//     console.log("PublicIp", first.Association.PublicIp);
+//   })
+//   .catch((rejection) => {
+//     console.error(rejection);
+//   });
+
+var paramsTask = {
+  cluster: clusterName,
+  taskDefinition: "game-task:219",
+  launchType: "FARGATE",
+  networkConfiguration: {
+    awsvpcConfiguration: {
+      assignPublicIp: "ENABLED",
+      subnets: ["subnet-06c96d569f4a756c8"],
+    },
+  },
+};
+ecs.runTask(paramsTask, function (err, data) {
+  console.log(err, data);
+});
+
+// var paramsTaskDefinition = {
+//   taskDefinition: "game-task:219",
+// };
+// ecs.describeTaskDefinition(paramsTaskDefinition, function (err, data) {
+//   console.log(err, JSON.stringify(data, null, 4));
+// });
