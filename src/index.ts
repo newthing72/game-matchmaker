@@ -83,16 +83,46 @@ var paramsTask = {
     awsvpcConfiguration: {
       assignPublicIp: "ENABLED",
       subnets: ["subnet-06c96d569f4a756c8"],
+      securityGroups: ["sg-045dd765d4d869c08", "sg-0c39de4a792107160"],
     },
   },
 };
-ecs.runTask(paramsTask, function (err, data) {
-  console.log(err, data);
-});
+
+// "securityGroups": [
+//   [1]                         "sg-045dd765d4d869c08",
+//   [1]                         "sg-0c39de4a792107160"
+//   [1]                    ],
+
+ecs
+  .runTask(paramsTask)
+  .promise()
+  .then((data) => {
+    const first = data.tasks[0];
+    const taskArn = first.taskArn;
+    console.log("create taskArn", taskArn);
+    var paramsWait = {
+      cluster: clusterName,
+      tasks: [taskArn],
+    };
+    return ecs.waitFor("tasksRunning", paramsWait).promise();
+  })
+  .then((value) => {
+    console.log("waited for", value);
+  });
 
 // var paramsTaskDefinition = {
 //   taskDefinition: "game-task:219",
 // };
+
 // ecs.describeTaskDefinition(paramsTaskDefinition, function (err, data) {
 //   console.log(err, JSON.stringify(data, null, 4));
+// });
+
+// var paramsWait = {
+//   tasks: ["STRING_VALUE"],
+// };
+
+// ecs.waitFor("tasksRunning", paramsWait, function (err, data) {
+//   if (err) console.log(err, err.stack); // an error occurred
+//   else console.log(JSON.stringify(data, null, 4)); // successful response
 // });
